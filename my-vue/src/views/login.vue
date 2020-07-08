@@ -1,121 +1,79 @@
 <template>
   <div class="login">
-    <h1>表单</h1>
-    <el-form
-      :model="ruleForm"
-      status-icon
-      :rules="rules"
-      ref="ruleForm"
-      label-width="100px"
-      class="demo-ruleForm"
-    >
-      <el-form-item label="用户名" prop="pass">
-        <el-input type="text" v-model="ruleForm.pass"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码" prop="checkPass">
-        <el-input type="password" v-model="ruleForm.checkPass" autocomplete="off"></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="submitForm('ruleForm')">提交</el-button>
-        <el-button @click="resetForm('ruleForm')">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <div class="button">
+      <div @click="tab" data-ind="1" :class="{'active': switchover==1}">登录</div>
+      <div @click="tab" data-ind="2" :class="{'active': switchover==2}">注册</div>
+    </div>
+    <div class="login_">
+      <label>
+        <span>账号：</span>
+        <input type="text" v-model="user" />
+      </label>
+      <label>
+        <span>密码：</span>
+        <input type="password" v-model="passw" />
+      </label>
+    </div>
+    <div>
+      <div @click="longin" class="queding">确定</div>
+    </div>
   </div>
 </template>
+<script>
+export default {
+  data() {
+    return {
+      user: "11111",
+      passw: "",
+      switchover: 1
+    };
+  },
+  methods: {
+    tab: function(event) {
+      console.log(this);
+      console.log(event);
+      this.switchover = event.target.dataset.ind;
+    },
+    longin: function() {}
+  }
+};
+</script>
 <style lang="scss" scoped>
-h1 {
-  line-height: 30px;
-  text-align: center;
-}
 .login {
   padding-top: 50px;
   width: 800px;
   margin: 0 auto;
 }
-.el-form-item {
-  margin-bottom: 22px;
+.button {
+  display: flex;
+  justify-content: center;
 }
-// .el-select {
-//   width: 100%;
-// }
-// .el-checkbox {
-//   color: #606266;
-//   font-weight: 500;
-//   font-size: 14px;
-//   cursor: pointer;
-//   -webkit-user-select: none;
-//   -moz-user-select: none;
-//   -ms-user-select: none;
-//   user-select: none;
-//   margin-right: 30px;
-// }
+.button div,
+.queding {
+  width: 150px;
+  line-height: 40px;
+  background: #777;
+  color: #fff;
+  text-align: center;
+  border-radius: 2px;
+  margin-left: 50px;
+  cursor: pointer;
+}
+.queding {
+  margin: 0 auto;
+  background: cornflowerblue;
+}
+.button .active {
+  background: cornflowerblue;
+}
+.login_ label {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 20px 0;
+}
+.login_ label input {
+  width: 300px;
+  line-height: 30px;
+}
 </style>
-<script>
-export default {
-  data() {
-    var checkAge = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error("年龄不能为空"));
-      }
-      setTimeout(() => {
-        if (!Number.isInteger(value)) {
-          callback(new Error("请输入数字值"));
-        } else {
-          if (value < 18) {
-            callback(new Error("必须年满18岁"));
-          } else {
-            callback();
-          }
-        }
-      }, 1000);
-    };
-    var validatePass = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请输入密码"));
-      } else {
-        if (this.ruleForm.checkPass !== "") {
-          this.$refs.ruleForm.validateField("checkPass");
-        }
-        callback();
-      }
-    };
-    var validatePass2 = (rule, value, callback) => {
-      if (value === "") {
-        callback(new Error("请再次输入密码"));
-      } else if (value !== this.ruleForm.pass) {
-        callback(new Error("两次输入密码不一致!"));
-      } else {
-        callback();
-      }
-    };
-    return {
-      ruleForm: {
-        pass: "",
-        checkPass: "",
-        age: ""
-      },
-      rules: {
-        pass: [{ validator: validatePass, trigger: "blur" }],
-        checkPass: [{ validator: validatePass2, trigger: "blur" }],
-        age: [{ validator: checkAge, trigger: "blur" }]
-      }
-    };
-  },
-  methods: {
-    submitForm(formName) {
-      this.$refs[formName].validate(valid => {
-        console.log(valid);
-        if (valid) {
-          alert("submit!");
-        } else {
-          console.log("error submit!!");
-          return false;
-        }
-      });
-    },
-    resetForm(formName) {
-      this.$refs[formName].resetFields();
-    }
-  }
-};
-</script>
